@@ -1,7 +1,7 @@
 package cz.kotu.flights
 
+import cz.kotu.flights.flights.FlightsResponse
 import io.reactivex.Single
-import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,5 +10,5 @@ interface SkypickerService {
     fun getFlights(
         @Query("dateFrom") dateFrom: String,
         @Query("dateTo") dateTo: String
-    ): Single<ResponseBody>
+    ): Single<FlightsResponse>
 }
