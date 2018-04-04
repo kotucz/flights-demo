@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        flights.offscreenPageLimit = 5 // preload images
         flights.adapter = flightsPagerAdapter
 
         FlightsModule().flightsService.getFlights(
