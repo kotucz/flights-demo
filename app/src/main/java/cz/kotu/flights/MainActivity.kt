@@ -2,8 +2,10 @@ package cz.kotu.flights
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import cz.kotu.flights.flights.Flight
+import cz.kotu.flights.di.FlightsModule
 import cz.kotu.flights.ui.FlightsPagerAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.schedulers.Schedulers.io
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,9 +17,15 @@ class MainActivity : AppCompatActivity() {
 
         flights.adapter = flightsPagerAdapter
 
-        flightsPagerAdapter.items = listOf(
-            Flight("Kravaře", 169.42, 289.0),
-            Flight("Amsterdam", 1080.5, 6_293.0)
-        )
+        FlightsModule().flightsService.getFlights(
+            dateFrom = "03/04/2018",
+            dateTo = "03/05/2018"
+        ).subscribeOn(io())
+            .observeOn(mainThread())
+            .subscribe({
+                flightsPagerAdapter.items = it.flights
+            }, {
+                // TODO show error
+            })
     }
 }
