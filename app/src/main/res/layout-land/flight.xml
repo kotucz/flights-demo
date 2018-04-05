@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/backgroundView">
+    android:layout_width="match_parent" android:layout_height="match_parent" tools:layout_editor_absoluteY="73dp">
 
     <ImageView android:layout_width="0dp" android:layout_height="wrap_content" android:id="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" android:adjustViewBounds="true"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0" android:scaleType="centerCrop" />
+    <View android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/backgroundView" android:alpha="0.8" />
     <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:id="@+id/cityLabel"
         app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/priceLabel" android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp" app:layout_constraintHorizontal_bias="0.0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" tools:text="Far Far Away" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" tools:text="Barcelona"
+        android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/hashtagsLabel" />
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/priceLabel"
         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" tools:text="Priceless" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" tools:text="Free"
+        android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/hashtagsLabel" />
     <Button android:layout_width="0dp" android:layout_height="wrap_content" android:id="@+id/goButton"
         app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" android:text="@string/go"
         android:background="@android:color/holo_orange_light" />
     <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:id="@+id/hashtagsLabel"
-        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/cityLabel"
         app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
         tools:text="#chzechgirl #keepsmiling" android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginRight="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/distanceLabel" />
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/distanceLabel"
-        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/hashtagsLabel"
         app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
-        tools:text="12345km" android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+        tools:text="12345km" android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/goButton" />
 </android.support.constraint.ConstraintLayout>
