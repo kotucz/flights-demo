@@ -20,6 +20,7 @@ class FlightsController(
     private val repository: FlightsRepository
 ) {
     private val messageRelay = BehaviorRelay.createDefault<String>("")
+    private var updating: Boolean = false
 
     val flights: Observable<List<Flight>> = repository.offersFlights.asObservable()
     val message: Observable<String> get() = messageRelay.hide()
@@ -31,6 +32,9 @@ class FlightsController(
     }
 
     private fun refreshOffers(today: LocalDate) {
+        if (updating) return
+        updating = true
+
         repository.previousFlights.set(repository.previousFlights.get() + repository.offersFlights.get())
         repository.offersFlights.delete()
         messageRelay.accept(resources.getString(R.string.loading))
@@ -50,6 +54,7 @@ class FlightsController(
                 repository.offersDate.set(today)
                 messageRelay.accept("")
             }
+            .doAfterTerminate { updating = false }
             .subscribe(
                 repository.offersFlights.asConsumer(),
                 Consumer {
