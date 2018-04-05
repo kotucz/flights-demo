@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">flights</string>
+    <string name="loading">Searching …</string>
 </resources>

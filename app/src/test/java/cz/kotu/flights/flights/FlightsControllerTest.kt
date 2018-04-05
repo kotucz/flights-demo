@@ -1,9 +1,11 @@
 package cz.kotu.flights.flights
 
+import android.content.res.Resources
 import com.nhaarman.mockito_kotlin.*
 import cz.kotu.flights.SkypickerService
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.Assert
 import org.junit.Before
@@ -14,6 +16,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.io.IOException
 
 class FlightsControllerTest {
+    private lateinit var resources: Resources
     private lateinit var repository: SimpleFlightsRepository
     private val dateFormatter = mock<DateTimeFormatter> {
         whenever(it.format(any())).thenReturn("any/date")
@@ -21,7 +24,11 @@ class FlightsControllerTest {
 
     @Before
     fun setUp() {
+        RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        resources = mock {
+            whenever(it.getString(any())).thenReturn("anyString")
+        }
         repository = SimpleFlightsRepository()
     }
 
@@ -31,6 +38,7 @@ class FlightsControllerTest {
         val sameDay = LocalDate.of(2018, Month.APRIL, 5)
         repository.offersDate.set(sameDay)
         val controller = FlightsController(
+            resources,
             dateFormatter,
             flightsService,
             repository
@@ -54,6 +62,7 @@ class FlightsControllerTest {
             )
         }
         val controller = FlightsController(
+            resources,
             dateFormatter,
             flightsService,
             repository
@@ -93,6 +102,7 @@ class FlightsControllerTest {
             )
         )
         val controller = FlightsController(
+            resources,
             dateFormatter,
             flightsService,
             repository
@@ -117,6 +127,7 @@ class FlightsControllerTest {
             )
         }
         val controller = FlightsController(
+            resources,
             dateFormatter,
             flightsService,
             repository

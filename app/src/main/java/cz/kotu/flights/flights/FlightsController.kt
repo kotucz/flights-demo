@@ -1,6 +1,8 @@
 package cz.kotu.flights.flights
 
+import android.content.res.Resources
 import com.jakewharton.rxrelay2.BehaviorRelay
+import cz.kotu.flights.R
 import cz.kotu.flights.SkypickerService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -12,11 +14,12 @@ import org.threeten.bp.format.DateTimeFormatter
 const val dailyOffersCount = 5
 
 class FlightsController(
+    private val resources: Resources,
     private val dateFormatter: DateTimeFormatter,
     private val flightsService: SkypickerService,
     private val repository: FlightsRepository
 ) {
-    private val messageRelay = BehaviorRelay.create<String>()
+    private val messageRelay = BehaviorRelay.createDefault<String>("")
 
     val flights: Observable<List<Flight>> = repository.offersFlights.asObservable()
     val message: Observable<String> get() = messageRelay.hide()
@@ -30,6 +33,7 @@ class FlightsController(
     private fun refreshOffers(today: LocalDate) {
         repository.previousFlights.set(repository.previousFlights.get() + repository.offersFlights.get())
         repository.offersFlights.delete()
+        messageRelay.accept(resources.getString(R.string.loading))
 
         val end = today.plusMonths(1)
         flightsService.getFlights(
@@ -42,7 +46,10 @@ class FlightsController(
                     .filter { wasNotOffered(it) }
                     .take(dailyOffersCount)
             }
-            .doAfterSuccess { repository.offersDate.set(today) }
+            .doAfterSuccess {
+                repository.offersDate.set(today)
+                messageRelay.accept("")
+            }
             .subscribe(
                 repository.offersFlights.asConsumer(),
                 Consumer {

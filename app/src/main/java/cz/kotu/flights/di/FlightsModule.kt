@@ -33,6 +33,7 @@ class FlightsModule(context: Application) {
 
     val flightsController by lazy {
         FlightsController(
+            context.resources,
             dateFormatter,
             flightsService,
             flightsRepository
