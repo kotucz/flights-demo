@@ -28,6 +28,8 @@ class FlightsPagerAdapter : ViewPagerAdapter() {
                     .into(imageView)
                 cityLabel.text = flight.city
                 priceLabel.text = flight.price.toString()
+                hashtagsLabel.text = flight.hashtags.joinToString(separator = " ") { "#$it" }
+                distanceLabel.text = "${flight.distance}km"
                 goButton.setOnClickListener {
                     context.startActivity(
                         Intent(
