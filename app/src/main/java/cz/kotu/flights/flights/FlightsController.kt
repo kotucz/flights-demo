@@ -6,8 +6,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers.io
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class FlightsController(
+    private val dateFormatter: DateTimeFormatter,
     private val flightsService: SkypickerService
 ) {
     private val flightsRelay = BehaviorRelay.create<List<Flight>>()
@@ -17,9 +20,11 @@ class FlightsController(
     val message: Observable<String> get() = messageRelay.hide()
 
     init {
+        val today = LocalDate.now()
+        val end = today.plusMonths(1)
         flightsService.getFlights(
-            dateFrom = "03/04/2018",
-            dateTo = "03/05/2018"
+            dateFrom = dateFormatter.format(today),
+            dateTo = dateFormatter.format(end)
         ).subscribeOn(io())
             .observeOn(mainThread())
             .map { it.flights }
