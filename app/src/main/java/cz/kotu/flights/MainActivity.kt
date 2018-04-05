@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import cz.kotu.flights.di.FlightsModule
 import cz.kotu.flights.ui.FlightsPagerAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import io.reactivex.schedulers.Schedulers.io
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val flightsPagerAdapter = FlightsPagerAdapter()
+
+    private val flightsController = FlightsModule().flightsController
+
+    private lateinit var subscriptions: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,16 +20,22 @@ class MainActivity : AppCompatActivity() {
 
         flights.offscreenPageLimit = 5 // preload images
         flights.adapter = flightsPagerAdapter
+    }
 
-        FlightsModule().flightsService.getFlights(
-            dateFrom = "03/04/2018",
-            dateTo = "03/05/2018"
-        ).subscribeOn(io())
-            .observeOn(mainThread())
-            .subscribe({
-                flightsPagerAdapter.items = it.flights
-            }, {
-                // TODO show error
-            })
+    override fun onResume() {
+        super.onResume()
+
+        subscriptions = CompositeDisposable(
+            flightsController.message.subscribe(messageLabel::setText),
+            flightsController.flights
+                .subscribe({
+                    flightsPagerAdapter.items = it
+                })
+        )
+    }
+
+    override fun onPause() {
+        subscriptions.dispose()
+        super.onPause()
     }
 }

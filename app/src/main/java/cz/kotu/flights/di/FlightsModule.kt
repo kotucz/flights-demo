@@ -1,6 +1,7 @@
 package cz.kotu.flights.di
 
 import cz.kotu.flights.SkypickerService
+import cz.kotu.flights.flights.FlightsController
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,4 +23,6 @@ class FlightsModule {
         .build()
 
     val flightsService = retrofit.create(SkypickerService::class.java)
+
+    val flightsController = FlightsController(flightsService)
 }
