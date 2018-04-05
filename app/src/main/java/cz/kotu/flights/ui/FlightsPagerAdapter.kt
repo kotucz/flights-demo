@@ -27,7 +27,7 @@ class FlightsPagerAdapter : ViewPagerAdapter() {
         container.inflate(R.layout.flight).apply {
             items[position].let { flight ->
                 val resolvedUrl = "https://images.kiwi.com/photos/600/${flight.photoId}.jpg"
-                Picasso.get()
+                Picasso.with(context)
                     .load(resolvedUrl)
                     .into(imageView, PicassoPalette.with(resolvedUrl, imageView)
                         .intoCallBack { palette ->
