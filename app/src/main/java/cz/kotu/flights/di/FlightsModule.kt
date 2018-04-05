@@ -2,8 +2,8 @@ package cz.kotu.flights.di
 
 import android.app.Application
 import cz.kotu.flights.SkypickerService
+import cz.kotu.flights.data.PreferencesFlightsRepository
 import cz.kotu.flights.flights.FlightsController
-import cz.kotu.flights.flights.FlightsRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.threeten.bp.format.DateTimeFormatter
@@ -29,7 +29,7 @@ class FlightsModule(context: Application) {
 
     val flightsService = retrofit.create(SkypickerService::class.java)
 
-    val flightsRepository by lazy { FlightsRepository(context) }
+    val flightsRepository by lazy { PreferencesFlightsRepository(context) }
 
     val flightsController by lazy {
         FlightsController(

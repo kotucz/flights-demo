@@ -7,6 +7,7 @@ import cz.kotu.flights.flights.FlightsController
 import cz.kotu.flights.ui.FlightsPagerAdapter
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
+import org.threeten.bp.LocalDate
 
 class MainActivity : AppCompatActivity() {
     private val flightsPagerAdapter = FlightsPagerAdapter()
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         flightsController = FlightsModule(application).flightsController
+        flightsController.checkUpdate(LocalDate.now())
 
         flights.offscreenPageLimit = 5 // preload images
         flights.adapter = flightsPagerAdapter
