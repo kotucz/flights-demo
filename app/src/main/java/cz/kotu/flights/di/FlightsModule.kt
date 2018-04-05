@@ -1,7 +1,9 @@
 package cz.kotu.flights.di
 
+import android.app.Application
 import cz.kotu.flights.SkypickerService
 import cz.kotu.flights.flights.FlightsController
+import cz.kotu.flights.flights.FlightsRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.threeten.bp.format.DateTimeFormatter
@@ -9,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class FlightsModule {
+class FlightsModule(context: Application) {
     val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
     val client = OkHttpClient.Builder()
@@ -27,5 +29,13 @@ class FlightsModule {
 
     val flightsService = retrofit.create(SkypickerService::class.java)
 
-    val flightsController by lazy { FlightsController(dateFormatter, flightsService) }
+    val flightsRepository by lazy { FlightsRepository(context) }
+
+    val flightsController by lazy {
+        FlightsController(
+            dateFormatter,
+            flightsService,
+            flightsRepository
+        )
+    }
 }

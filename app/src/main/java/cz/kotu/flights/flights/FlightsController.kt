@@ -11,16 +11,23 @@ import org.threeten.bp.format.DateTimeFormatter
 
 class FlightsController(
     private val dateFormatter: DateTimeFormatter,
-    private val flightsService: SkypickerService
+    private val flightsService: SkypickerService,
+    private val repository: FlightsRepository
 ) {
-    private val flightsRelay = BehaviorRelay.create<List<Flight>>()
     private val messageRelay = BehaviorRelay.create<String>()
 
-    val flights: Observable<List<Flight>> get() = flightsRelay.hide()
+    val flights: Observable<List<Flight>> = repository.offersFlights.asObservable()
     val message: Observable<String> get() = messageRelay.hide()
 
     init {
         val today = LocalDate.now()
+
+        if (repository.offersDate.get().isBefore(today)) {
+            refreshOffers(today)
+        }
+    }
+
+    private fun refreshOffers(today: LocalDate) {
         val end = today.plusMonths(1)
         flightsService.getFlights(
             dateFrom = dateFormatter.format(today),
@@ -29,7 +36,7 @@ class FlightsController(
             .observeOn(mainThread())
             .map { it.flights }
             .subscribe(
-                flightsRelay,
+                repository.offersFlights.asConsumer(),
                 Consumer {
                     messageRelay.accept(it.toString())
                 })

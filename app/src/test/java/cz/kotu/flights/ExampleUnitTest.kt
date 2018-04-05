@@ -1,5 +1,6 @@
 package cz.kotu.flights
 
+import com.nhaarman.mockito_kotlin.mock
 import cz.kotu.flights.di.FlightsModule
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -20,6 +21,6 @@ class ExampleUnitTest {
     @Test
     fun formatDate() {
         val date = LocalDate.of(2018, Month.APRIL, 1)
-        assertEquals("01/04/2018", FlightsModule().dateFormatter.format(date))
+        assertEquals("01/04/2018", FlightsModule(mock()).dateFormatter.format(date))
     }
 }
