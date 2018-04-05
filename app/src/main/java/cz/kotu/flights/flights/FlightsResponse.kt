@@ -10,6 +10,7 @@ data class FlightsResponse(
 data class Flight(
     @Json(name = "id") val id: String,
     @Json(name = "cityTo") val city: String,
+    @Json(name = "booking_token") val bookingToken: String,
     @Json(name = "distance") val distance: Double,
     @Json(name = "mapIdto") val photoId: String,
     @Json(name = "price") val price: Double

@@ -1,5 +1,7 @@
 package cz.kotu.flights.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
@@ -8,6 +10,7 @@ import cz.kotu.flights.flights.Flight
 import cz.kotu.flights.utils.ViewPagerAdapter
 import cz.kotu.flights.utils.inflate
 import kotlinx.android.synthetic.main.flight.view.*
+import okhttp3.HttpUrl
 
 class FlightsPagerAdapter : ViewPagerAdapter() {
     var items: List<Flight> = listOf()
@@ -25,6 +28,17 @@ class FlightsPagerAdapter : ViewPagerAdapter() {
                     .into(imageView)
                 cityLabel.text = flight.city
                 priceLabel.text = flight.price.toString()
+                goButton.setOnClickListener {
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW, Uri.parse(
+                                HttpUrl.parse("https://www.kiwi.com/en/booking")!!.newBuilder()
+                                    .addQueryParameter("token", flight.bookingToken)
+                                    .build().toString()
+                            )
+                        )
+                    )
+                }
             }
         }
 
